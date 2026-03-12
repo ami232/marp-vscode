@@ -178,9 +178,9 @@ export class Themes {
     const watcherPattern: GlobPattern | undefined =
       type !== ThemeType.Remote
         ? new RelativePattern(
-          Uri.joinPath(themeUri, '..'),
-          themeUri.path.split('/').pop()!,
-        )
+            Uri.joinPath(themeUri, '..'),
+            themeUri.path.split('/').pop()!,
+          )
         : undefined
 
     if (watcherPattern) {

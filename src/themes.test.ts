@@ -1,4 +1,3 @@
-import path from 'node:path'
 import { Uri } from 'vscode'
 import { Themes } from './themes'
 
@@ -17,7 +16,10 @@ describe('Themes', () => {
     })
 
     it('adds remote URLs', () => {
-      const paths = ['https://example.com/theme.css', 'http://example.com/theme2.css']
+      const paths = [
+        'https://example.com/theme.css',
+        'http://example.com/theme2.css',
+      ]
       const normalized = normalizePaths(paths)
       expect(normalized).toHaveLength(2)
       expect(normalized[0].toString()).toBe('https://example.com/theme.css')
@@ -60,10 +62,10 @@ describe('Themes', () => {
         'https://example.com/theme.css',
         '/absolute/path/theme.css',
         'relative/theme.css',
-        'https://example.com/theme.css',      // Duplicate
-        '/absolute/path/theme.css',           // Duplicate
-        'relative/theme.css',                 // Duplicate
-        '/root/workspace/relative/theme.css'  // Duplicate absolute of relative path
+        'https://example.com/theme.css', // Duplicate
+        '/absolute/path/theme.css', // Duplicate
+        'relative/theme.css', // Duplicate
+        '/root/workspace/relative/theme.css', // Duplicate absolute of relative path
       ]
 
       const normalized = normalizePaths(paths, rootUri)
