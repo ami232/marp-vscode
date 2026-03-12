@@ -1,3 +1,4 @@
+import path from 'node:path'
 import Marp from '@marp-team/marp-core'
 import {
   commands,
@@ -120,36 +121,29 @@ export class Themes {
   }
 
   private normalizePaths(paths: string[], rootUri: Uri | undefined): Uri[] {
-    const normalizedPaths = new Set<Uri>()
+    const seen = new Map<string, Uri>()
+
+    const add = (uri: Uri) => {
+      const key = uri.toString()
+      if (!seen.has(key)) seen.set(key, uri)
+    }
 
     for (const p of paths) {
       if (typeof p !== 'string') continue
 
       if (isRemotePath(p)) {
-        normalizedPaths.add(Uri.parse(p, true))
+        add(Uri.parse(p, true))
+      } else if (path.posix.isAbsolute(p) || path.win32.isAbsolute(p)) {
+        add(Uri.file(p))
       } else if (rootUri) {
         const targetUri = Uri.joinPath(rootUri, p)
 
         // Prevent directory traversal
-        if (targetUri.path.startsWith(rootUri.path)) {
-          normalizedPaths.add(targetUri)
-        }
+        if (targetUri.path.startsWith(rootUri.path)) add(targetUri)
       }
     }
 
-    const out: Uri[] = []
-    const outStringPaths: string[] = []
-
-    for (const uri of normalizedPaths) {
-      const uriString = uri.toString()
-
-      if (!outStringPaths.includes(uriString)) {
-        out.push(uri)
-        outStringPaths.push(uriString)
-      }
-    }
-
-    return out
+    return [...seen.values()]
   }
 
   private async registerTheme(themeUri: Uri): Promise<Theme> {
@@ -184,9 +178,9 @@ export class Themes {
     const watcherPattern: GlobPattern | undefined =
       type !== ThemeType.Remote
         ? new RelativePattern(
-            Uri.joinPath(themeUri, '..'),
-            themeUri.path.split('/').pop()!,
-          )
+          Uri.joinPath(themeUri, '..'),
+          themeUri.path.split('/').pop()!,
+        )
         : undefined
 
     if (watcherPattern) {
