@@ -414,7 +414,7 @@
     "jest-environment-jsdom": "^30.0.5",
     "jest-junit": "^16.0.0",
     "lodash.debounce": "^4.0.8",
-    "markdown-it": "^14.1.0",
+    "markdown-it": "^14.1.1",
     "nanoid": "^5.1.5",
     "npm-check-updates": "^18.0.2",
     "npm-run-all2": "^8.0.4",
@@ -437,7 +437,7 @@
     "unist-util-visit": "^5.0.0",
     "util": "^0.12.5",
     "vscode-uri": "^3.1.0",
-    "webpack": "^5.101.0",
+    "webpack": "^5.105.4",
     "webpack-cli": "^6.0.1",
     "yaml": "^2.8.1"
   },
